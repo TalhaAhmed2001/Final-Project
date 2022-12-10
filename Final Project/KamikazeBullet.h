@@ -3,7 +3,7 @@
 class KamikazeBullet : public Projectile
 {
 public:
-	KamikazeBullet(int x, int y) : Projectile(x, y, 32, 48, 50, 60, 2, "kamikazerocket.png") {
+	KamikazeBullet(int x, int y) : Projectile(x, y, 32, 48, 50, 60, 2, "sprites/kamikazerocket.png") {
 		
 	}
 

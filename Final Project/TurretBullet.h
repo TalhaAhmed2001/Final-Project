@@ -6,7 +6,7 @@ private:
 	float x_vec = 0;
 	float y_vec = 0;
 public:
-	TurretBullet(int x, int y, int mouse_x, int mouse_y) : Projectile(x, y, 16, 16, 25, 10, 1, "turretbullet.png") {
+	TurretBullet(int x, int y, int mouse_x, int mouse_y) : Projectile(x, y, 16, 16, 25, 10, 1, "sprites/turretbullet.png") {
 		setAngleVec(mouse_x, mouse_y);
 	}
 

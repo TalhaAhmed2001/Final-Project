@@ -4,7 +4,7 @@
 class Apache : public Character
 {
 public:
-	Apache(int x, int y) : Character(x,y, 64, 128, 2, "apache.png", 100, 120, 120, 3000) {
+	Apache(int x, int y) : Character(x,y, 64, 128, 2, "sprites/apache.png", 100, 120, 120, 3000) {
 
 	}
 

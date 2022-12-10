@@ -28,11 +28,10 @@ private:
 	const int SCREEN_WIDTH = 1400;
 	const int SCREEN_HEIGHT = 600;
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-	const string crosshair_path = "target.png";
-	const string button_path = "button.png";
-	const string menu_bg = "menubg.png";
-	const string level2_bg = "backdrop1.png";
-	const string level1_bg = "backdrop2.png";
+	const string crosshair_path = "sprites/target.png";
+	const string menu_bg = "sprites/menubg.png";
+	const string level2_bg = "sprites/backdrop1.png";
+	const string level1_bg = "sprites/backdrop2.png";
 
 	int health = 0;
 	const int button_w = 200;

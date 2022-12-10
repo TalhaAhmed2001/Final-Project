@@ -16,6 +16,6 @@ Projectile* Tank::shoot() {
 
 Particle* Tank::getParticle()
 {
-	Explosion* particle = new Explosion(getX(), getY(), getSpriteSize(), "explosion1.png");
+	Explosion* particle = new Explosion(getX(), getY(), getSpriteSize(), "sprites/explosion1.png");
 	return particle;
 }

@@ -3,7 +3,7 @@
 class Tank : public Character
 {
 public:
-	Tank(int x, int y) : Character(x, y, 64, 128, 2, "tank.png", 200, 120, 120, 2000) {
+	Tank(int x, int y) : Character(x, y, 64, 128, 2, "sprites/tank.png", 200, 120, 120, 2000) {
 
 	}
 

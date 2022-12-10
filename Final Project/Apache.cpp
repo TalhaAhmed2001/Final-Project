@@ -18,6 +18,6 @@ Projectile* Apache::shoot()
 
 Particle* Apache::getParticle()
 {
-    Explosion* particle = new Explosion(getX(), getY(), getSpriteSize(), "explosion2.png");
+    Explosion* particle = new Explosion(getX(), getY(), getSpriteSize(), "sprites/explosion2.png");
     return particle;
 }
