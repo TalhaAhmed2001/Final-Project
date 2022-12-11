@@ -2,5 +2,6 @@
 
 void Missile::Move()
 {
-	setX(getX() + 10);
+	setX(getX() + 15);
+	animate();
 }

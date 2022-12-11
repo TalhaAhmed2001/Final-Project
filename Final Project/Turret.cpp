@@ -27,7 +27,7 @@ void Turret::animate() {
 		setCurrSprite(0);
 	}
 	else {
-		setCurrSprite(getCurrSprite() + 0.2);
+		setCurrSprite(getCurrSprite() + 0.5);
 	}
 
 }

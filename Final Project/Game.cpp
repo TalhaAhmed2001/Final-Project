@@ -449,7 +449,7 @@ void Game::spawnPlayer1() {
 	Base* base = new Base(50, 200);
 	player.insert(player.begin(), base);
 
-	Turret* play = new Turret(130, 110);
+	Turret* play = new Turret(110, 100);
 	player.insert(player.begin(), play);
 
 }
@@ -579,7 +579,7 @@ void Game::renderPlayerProjectile() {
 		Pic2Texture(temp->getPath());
 
 		SDL_Rect img_box;
-		img_box.x = 0;
+		img_box.x = (int)(temp->getCurrSprite()) * temp->getImageSize();
 		img_box.y = 0;
 		img_box.w = temp->getImageSize();
 		img_box.h = temp->getImageSize();
@@ -766,6 +766,13 @@ void Game::play() {
 }
 
 void Game::level1Pass() {
+
+	infantry_count = 0;
+	brute_count = 0;
+	tank_count = 0;
+	apache_count = 0;
+	kamikaze_count = 0;
+
 	level1 = false;
 	level2 = true;
 }

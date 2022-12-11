@@ -2,15 +2,17 @@
 #include "GameObject.h"
 class UI : public GameObject
 {
-public:
+private:
 	int val;
+	int max_val;
+public:
 	UI(int x, int y, string p, int v) : GameObject(x, y, 64, 64, 1, p) {
 		val = v;
+		max_val = v;
 	}
 	
-	void setVal(int v);
 	int getVal();
-	void incVal();
+	void incVal(int v);
 	void decVal();
 };
 

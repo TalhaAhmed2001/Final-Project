@@ -43,8 +43,8 @@ bool GameObject::isAlive() {
 }
 
 void GameObject::animate() {
-	if (curr_sprite + 0.3 < getAnimation()) {
-		curr_sprite += 0.3;
+	if (curr_sprite + 0.2 < getAnimation()) {
+		curr_sprite += 0.2;
 	}
 	else {
 		curr_sprite = 0;

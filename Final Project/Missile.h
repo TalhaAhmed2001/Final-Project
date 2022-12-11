@@ -3,7 +3,7 @@
 class Missile : public Projectile
 {
 public:
-	Missile() : Projectile(2, 50, 64, 32, 10, 50, 2, "sprites/tankbullet.png") {
+	Missile() : Projectile(2, 80, 64, 96, 100, 50, 3, "sprites/Missile.png") {
 
 	}
 
