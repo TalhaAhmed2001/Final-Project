@@ -1,8 +1,8 @@
 #include "TurretBullet.h"
 
 void TurretBullet::Move() {
-	setX(getX() + 2 * getXvec());
-	setY(getY() + 2 * getYvec());
+	setX(getX() + 1.75 * getXvec());
+	setY(getY() + 1.75 * getYvec());
 
 	ifOut();
 }

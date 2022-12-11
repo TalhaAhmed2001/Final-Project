@@ -1,12 +1,13 @@
 #include "Brute.h"
 #include "BruteBullet.h"
+#include "Blood.h"
 
 void Brute::Move() {
 	if (getX() <= 700) {
 		setAnimation(4);
 	}
 	else {
-		setX(getX() - 2);
+		setX(getX() - 1);
 	}
 	animate();
 }
@@ -16,4 +17,9 @@ Projectile* Brute::shoot() {
 	//setCurrSprite(getAnimation());
 	// animate();
 	return bullet;
+}
+
+Particle* Brute::getParticle() {
+	Blood* particle = new Blood(getX(), getY(), getSpriteSize());
+	return particle;
 }

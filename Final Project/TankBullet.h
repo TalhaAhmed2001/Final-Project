@@ -3,7 +3,7 @@
 class TankBullet : public Projectile
 {
 public:
-	TankBullet(int x, int y) : Projectile(x, y, 16, 16, 12, 25, 1, "tankbullet.png") {
+	TankBullet(int x, int y) : Projectile(x, y, 16, 16, 12, 25, 1, "sprites/tankbullet.png") {
 
 	}
 

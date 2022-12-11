@@ -19,6 +19,7 @@
 #include "Tank.h"
 #include "Turret.h"
 #include "Button.h"
+#include "UI.h"
 
 using namespace std;
 
@@ -41,16 +42,32 @@ private:
 	Button* load_button = new Button(SCREEN_WIDTH / 2 - button_w / 2, SCREEN_HEIGHT / 2 + 60, "load");
 	Button* exit_button = new Button(SCREEN_WIDTH / 2 - button_w / 2, SCREEN_HEIGHT / 2 + 170, "exit");
 	
+	UI* ammo_ui = new UI(20, 80, "sprites/ammoUI.png",100);
+	UI* grenade_ui = new UI(120, 80, "sprites/grenadeUI.png",10);
+	UI* missile_ui = new UI(220, 80, "sprites/missilesUI.png",10);
+	UI* airstrike_ui = new UI(20,140, "sprites/airstrikeUI.png",10);
+
 	SDL_Color color = { 0,0,0 };
 
-	int play_hover = 0;
-	int load_hover = 0;
-	int exit_hover = 0;
+	int shoot = 0;
+	long shoot_delay = 0;
+	long missile_delay = 0;
+	long grenade_delay = 0;
 
 	int mouse_x;
 	int mouse_y;
 
 	int countedFrames;
+
+	int infantry_count = 0;
+	int brute_count = 0;
+	int tank_count = 0;
+	int apache_count = 0;
+	int kamikaze_count = 0;
+
+	int ammo_count = 0;
+	int missile_count = 0;
+	int grenade_count = 0;
 
 	float bg_x;
 	float menu_bg_x;
@@ -75,6 +92,7 @@ private:
 	vector<Projectile*> player_projectile_list;
 	vector<Projectile*> enemy_projectile_list;
 	vector<Particle*> particle_engine;
+	vector<UI*> ui_list;
 
 	bool quit;
 	bool menu;
@@ -106,6 +124,7 @@ private:
 
 	//event handler
 	void keyEvents();
+	void spawnPlayerProjectile();
 
 	//move all objects
 	void moveEverything();

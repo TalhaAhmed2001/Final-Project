@@ -1,5 +1,9 @@
 #include "Character.h"
 
+int Character::getMaxHP() {
+	return max_health;
+}
+
 int Character::getHealth() {
 	return health;
 }
@@ -21,6 +25,13 @@ void Character::decHealth(int dmg) {
 	health -= dmg;
 	if (health <= 0) {
 		kill();
+	}
+}
+
+void Character::incHealth(int h) {
+	health += h;
+	if (health > max_health) {
+		health = max_health;
 	}
 }
 

@@ -134,7 +134,9 @@
   <ItemGroup>
     <ClCompile Include="Apache.cpp" />
     <ClCompile Include="ApacheBullet.cpp" />
+    <ClCompile Include="Barricade.cpp" />
     <ClCompile Include="Base.cpp" />
+    <ClCompile Include="Blood.cpp" />
     <ClCompile Include="Brute.cpp" />
     <ClCompile Include="BruteBullet.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -143,10 +145,12 @@
     <ClCompile Include="FinalProject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Infantry.cpp" />
     <ClCompile Include="InfantryBullet.cpp" />
     <ClCompile Include="Kamikaze.cpp" />
     <ClCompile Include="KamikazeBullet.cpp" />
+    <ClCompile Include="Missile.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Tank.cpp" />
@@ -154,11 +158,14 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Turret.cpp" />
     <ClCompile Include="TurretBullet.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Apache.h" />
     <ClInclude Include="ApacheBullet.h" />
+    <ClInclude Include="Barricade.h" />
     <ClInclude Include="Base.h" />
+    <ClInclude Include="Blood.h" />
     <ClInclude Include="Brute.h" />
     <ClInclude Include="BruteBullet.h" />
     <ClInclude Include="Button.h" />
@@ -166,17 +173,24 @@
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Grenade.h" />
     <ClInclude Include="Infantry.h" />
     <ClInclude Include="InfantryBullet.h" />
     <ClInclude Include="Kamikaze.h" />
     <ClInclude Include="KamikazeBullet.h" />
+    <ClInclude Include="Missile.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Tank.h" />
     <ClInclude Include="TankBullet.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Turret.h" />
     <ClInclude Include="TurretBullet.h" />
+    <ClInclude Include="UI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Final Project.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

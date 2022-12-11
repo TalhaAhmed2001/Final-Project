@@ -1,4 +1,8 @@
 #include "Game.h"
+#include "Base.h"
+#include "Barricade.h"
+#include "Missile.h"
+#include "Grenade.h"
 
 void Game::countFPS() {
 	countedFrames = 0;
@@ -69,6 +73,10 @@ bool Game::init()
 			else {
 				quit = false;
 				menu = true;
+				ui_list.insert(ui_list.begin(), ammo_ui);
+				ui_list.insert(ui_list.begin(),missile_ui);
+				ui_list.insert(ui_list.begin(), grenade_ui);
+				//ui_list.insert(ui_list.begin(), airstrike_ui);
 			}
 			//Hack to get window to stay up
 			//SDL_Event e; bool quit = false; while( quit == false ){ while( SDL_PollEvent( &e ) ){ if( e.type == SDL_QUIT ) quit = true; } }
@@ -222,7 +230,7 @@ bool Game::createText(string text) {
 bool Game::createGameText(string text) {
 	bool success = true;
 
-	font = TTF_OpenFont("ARCADE_I.ttf", 50);
+	font = TTF_OpenFont("ARCADE_R.ttf", 50);
 
 	SDL_Surface* surf = TTF_RenderText_Solid(font, text.c_str(), { 0, 0, 0 });
 
@@ -248,7 +256,7 @@ bool Game::createGameText(string text) {
 
 void Game::renderUI() {
 
-	int health = player.at(0)->getHealth();
+	int health = player.at(1)->getHealth();
 	if (health < 0) {
 		health = 0;
 	}
@@ -256,7 +264,7 @@ void Game::renderUI() {
 	SDL_Rect health_box;
 	health_box.x = 20;
 	health_box.y = 20;
-	health_box.w = health;
+	health_box.w = 500 * ((float)health / 1000);
 	health_box.h = 50;
 
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
@@ -277,6 +285,31 @@ void Game::renderUI() {
 	createGameText(std::to_string(health));
 	SDL_RenderCopy(renderer, texture, NULL, &health_num);
 	SDL_DestroyTexture(texture);
+
+	
+	for (UI* temp : ui_list) {
+		SDL_Rect ui_box;
+		ui_box.x = temp->getX();
+		ui_box.y = temp->getY();
+		ui_box.w = temp->getSpriteSize();
+		ui_box.h = temp->getSpriteSize();
+
+		Pic2Texture(temp->getPath());
+		SDL_RenderCopy(renderer, texture, NULL, &ui_box);
+		SDL_DestroyTexture(texture);
+
+		SDL_Rect weapon_count;
+		weapon_count.x = temp->getX() + 60;
+		weapon_count.y = temp->getY();
+		weapon_count.w = temp->getSpriteSize() - 20;
+		weapon_count.h = temp->getSpriteSize() ;
+
+		createGameText(std::to_string(temp->getVal()));
+		SDL_RenderCopy(renderer, texture, NULL, &weapon_count);
+		SDL_DestroyTexture(texture);
+	}
+	
+	
 
 }
 
@@ -300,17 +333,9 @@ bool Game::Pic2Texture(string path)
 	return success;
 }
 
-void Game::checkCollision()
-{
-	//player collsion
-	for (Character* temp1 : player) {
-		for (Projectile* temp2 : enemy_projectile_list) {
-			if (temp1->detCollision(temp2->getX(), temp2->getY(), temp2->getAoE(), temp2->getImageSize())) {
-				temp1->decHealth(temp2->getDamage());
-				temp2->kill();
-			}
-		}
-	}
+void Game::checkCollision(){
+
+	int health_inc = 0;
 
 	//enemy collison
 	for (Character* temp1 : enemy_list) {
@@ -318,6 +343,24 @@ void Game::checkCollision()
 			if (temp1->detCollision(temp2->getX(), temp2->getY(), temp2->getAoE(), temp2->getImageSize())) {
 				temp1->decHealth(temp2->getDamage());
 				temp2->kill();
+				if (!temp1->isAlive()) {
+					health_inc += temp1->getMaxHP();
+					
+				}
+			}
+		}
+	}
+
+	//player collsion
+	for (Character* temp1 : player) {
+		if (typeid(*temp1) == typeid(Base)) {
+			temp1->incHealth(health_inc);
+		}
+		for (Projectile* temp2 : enemy_projectile_list) {
+			if (temp1->detCollision(temp2->getX(), temp2->getY(), temp2->getAoE(), temp2->getImageSize())) {
+				temp1->decHealth(temp2->getDamage());
+				temp2->kill();
+				
 			}
 		}
 	}
@@ -330,8 +373,38 @@ void Game::keyEvents() {
 			quit = true;
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN) {
-			player_projectile_list.insert(player_projectile_list.begin(), player.at(0)->shoot(mouse_x+64,mouse_y+64));
+			shoot = 1;
 		}
+		if (e.type == SDL_MOUSEBUTTONUP) {
+			shoot = 0;
+		}
+	}
+
+	if (currentKeyStates[SDL_SCANCODE_X]){
+		//ui_list.at(0)->decVal();
+		if (missile_delay < fps_timer.getTicks() && ui_list.at(1)->getVal() > 0) {
+			missile_delay = fps_timer.getTicks() + 1000;
+			ui_list.at(1)->decVal();
+			Missile* missile = new Missile();
+			player_projectile_list.insert(player_projectile_list.begin(), missile);
+		}
+	}
+
+	if (currentKeyStates[SDL_SCANCODE_SPACE]) {
+		
+		if (grenade_delay < fps_timer.getTicks() && ui_list.at(0)->getVal() > 0) {
+			grenade_delay = fps_timer.getTicks() + 1000;
+			ui_list.at(0)->decVal();
+			Grenade* grenade = new Grenade();
+			player_projectile_list.insert(player_projectile_list.begin(), grenade);
+		}
+	}
+}
+
+void Game::spawnPlayerProjectile() {
+	if (shoot_delay < fps_timer.getTicks() && shoot == 1) {
+		shoot_delay = fps_timer.getTicks() + 200;
+		player_projectile_list.insert(player_projectile_list.begin(), player.at(0)->shoot(mouse_x + 64, mouse_y + 64));
 	}
 }
 
@@ -360,36 +433,57 @@ void Game::moveEverything() {
 }
 
 void Game::spawnPlayer1() {
-	Turret* play = new Turret(50, 200);
+	
+	Barricade* bar = new Barricade(270,320,"sprites/woodenbarricade.png", 200);
+	player.insert(player.begin(), bar);
+
+	bar = new Barricade(350, 320, "sprites/metalbarricade1.png", 100);
+	player.insert(player.begin(), bar);
+
+	bar = new Barricade(400, 320, "sprites/metalbarricade3.png", 100);
+	player.insert(player.begin(), bar);
+
+	bar = new Barricade(450, 320, "sprites/metalbarricade3.png", 100);
+	player.insert(player.begin(), bar);
+
+	Base* base = new Base(50, 200);
+	player.insert(player.begin(), base);
+
+	Turret* play = new Turret(130, 110);
 	player.insert(player.begin(), play);
+
 }
 
 void Game::spawnEnemies1() {
 
 	int time = fps_timer.getTicks();
 
-	if (time % 500 > 495 && time < 5000) {
-		//cout << time % 5000 << "\n";
+	if (time % 500 > 496 && time > 2000 && infantry_count < 50) {
+		infantry_count++;
 		Infantry* infantry = new Infantry(rand() % 100 + 1250, rand() % 10 + 335);
 		enemy_list.insert(enemy_list.begin(), infantry);
 	}
 
-	if (time % 2000 > 1992 && time < 15000 && time > 10000) {
+	if (time % 2000 > 1995 && time > 10000 && brute_count < 5) {
+		brute_count++;
 		Brute* brute = new Brute(1200, 263 + rand() % 3);
 		enemy_list.insert(enemy_list.begin(), brute);
 	}
 
-	if (time % 2500 > 2480 && time > 10000 && time < 20000) {
+	if (time % 2500 > 2490 && time > 25000 && apache_count < 4) {
+		apache_count++;
 		Apache* apache = new Apache(1300, 40 + rand() % 20);
 		enemy_list.insert(enemy_list.begin(), apache);
 	}
 
-	if (time % 3000 > 2985 && time < 30000 && time > 30000) {
+	if (time % 3000 > 2990 && time > 25000 && kamikaze_count < 7) {
+		kamikaze_count++;
 		Kamikaze* kamikaze = new Kamikaze(1200, rand() % 20 + 100);
 		enemy_list.insert(enemy_list.begin(), kamikaze);
 	}
 
-	if (time % 3000 > 2990 && time > 20000) {
+	if (time % 3000 > 2990 && time > 30000 && tank_count < 5) {
+		tank_count++;
 		Tank* tank = new Tank(1200, 305 + rand() % 10);
 		enemy_list.insert(enemy_list.begin(), tank);
 	}
@@ -544,7 +638,7 @@ void Game::renderMenuBackdrop() {
 void Game::renderBackdrop1() {
 
 	//bg_x += 0.2;(int)(bg_x) % 470
-	bg.x = 200;
+	bg.x = 20;
 	bg.y = 20;
 	bg.w = 466;
 	bg.h = 200;
@@ -632,6 +726,11 @@ void Game::eradicate() {
 		}
 	}
 
+	/*if (typeid(player.at(1)) != typeid(Base)) {
+		uDied();
+	}*/
+
+	
 }
 
 void Game::destroyAll() {
@@ -655,6 +754,13 @@ void Game::destroyAll() {
 }
 
 void Game::play() {
+
+	infantry_count = 0;
+	brute_count = 0;
+	tank_count = 0;
+	apache_count = 0;
+	kamikaze_count = 0;
+
 	menu = false;
 	level1 = true;
 }
@@ -682,12 +788,15 @@ void Game::uDied() {
 	die.h = 100;
 
 	SDL_RenderClear(renderer);
+	destroyAll();
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderCopy(renderer, texture, NULL, &die);
 	SDL_DestroyTexture(texture);
 	SDL_RenderPresent(renderer);
+
 	SDL_Delay(3000);
+	//init_menu();
 
 }
 
@@ -784,12 +893,17 @@ void Game::run() {
 
 				moveEverything();
 				checkCollision();
+				spawnPlayerProjectile();
 				spawnEnemies1();
 				spawnProjectiles1();
 				renderBackdrop1();
 				updateFrame();
 				eradicate();
 				
+				if (player.size() == 1) {
+					uDied();
+				}
+
 				calcFPS(countedFrames);
 
 				++countedFrames;
@@ -803,6 +917,6 @@ void Game::run() {
 		}
 	}
 	close();
-	system("pause");
+	//system("pause");
 
 }

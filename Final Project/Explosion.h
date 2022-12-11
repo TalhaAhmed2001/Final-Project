@@ -7,8 +7,6 @@ public:
 
 	}
 
-	/*void Move();
-	void animate();*/
 
 };
 

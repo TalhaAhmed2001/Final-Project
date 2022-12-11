@@ -34,7 +34,7 @@ void Turret::animate() {
 
 Projectile* Turret::shoot(int x, int y){
 
-	TurretBullet* bullet = new TurretBullet(getX() + getImageSize(), getY() + getImageSize(), x, y);
+	TurretBullet* bullet = new TurretBullet(getX() + getSpriteSize() - 60, getY() + getSpriteSize() / 2 - 20, x, y);
 	setCurrSprite(1);
 	return bullet;
 }
