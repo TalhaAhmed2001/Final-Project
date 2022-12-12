@@ -481,17 +481,17 @@ void Game::keyEvents() {
 }
 
 void Game::spawnSupplyBox() {
-	if (fps_timer.getTicks() % 30000 > 1000 && health_count == 0) {
+	if (fps_timer.getTicks() % 60000 > 50000 && health_count == 0) {
 		SupplyDrop* supply = new SupplyDrop(1,"sprites/Health.png");
 		enemy_list.insert(enemy_list.begin(), supply);
 		health_count = 1;
 	}
-	if (fps_timer.getTicks() % 40000 > 1000 && ammo_count == 0) {
+	if (fps_timer.getTicks() % 70000 > 60000 && ammo_count == 0) {
 		SupplyDrop* supply = new SupplyDrop(2,"sprites/ammo.png");
 		enemy_list.insert(enemy_list.begin(), supply);
 		ammo_count = 1;
 	}
-	if (fps_timer.getTicks() % 40000 > 1000 && airstrike_count == 0) {
+	if (fps_timer.getTicks() % 60000 > 30000 && airstrike_count == 0) {
 		SupplyDrop* supply = new SupplyDrop(3,"sprites/Airstrike.png");
 		enemy_list.insert(enemy_list.begin(), supply);
 		airstrike_count = 1;
@@ -557,36 +557,39 @@ void Game::spawnEnemies1() {
 
 	int time = fps_timer.getTicks();
 
-	if (time % 500 > 496 && time > 2000 && infantry_count < 50) {
+	if (time % 500 > 496 && time > 2000 && infantry_count < 30) {
 		infantry_count++;
 		Infantry* infantry = new Infantry(rand() % 100 + 1250, rand() % 10 + 335);
 		enemy_list.insert(enemy_list.begin(), infantry);
 	}
 
-	if (time % 2000 > 1995 && time > 10000 && brute_count < 5) {
+	if (time % 2000 > 1995 && time > 10000 && brute_count < 10) {
 		brute_count++;
 		Brute* brute = new Brute(1200, 263 + rand() % 3);
 		enemy_list.insert(enemy_list.begin(), brute);
 	}
 
-	if (time % 2500 > 2490 && time > 25000 && apache_count < 4) {
+	if (time % 2500 > 2495 && time > 20000 && apache_count < 6) {
 		apache_count++;
 		Apache* apache = new Apache(1300, 40 + rand() % 20);
 		enemy_list.insert(enemy_list.begin(), apache);
 	}
 
-	if (time % 3000 > 2990 && time > 25000 && kamikaze_count < 7) {
+	if (time % 3000 > 2990 && time > 25000 && kamikaze_count < 10) {
 		kamikaze_count++;
 		Kamikaze* kamikaze = new Kamikaze(1200, rand() % 20 + 100);
 		enemy_list.insert(enemy_list.begin(), kamikaze);
 	}
 
-	if (time % 3000 > 2990 && time > 30000 && tank_count < 5) {
+	if (time % 3000 > 2985 && time > 65000 && tank_count < 10) {
 		tank_count++;
 		Tank* tank = new Tank(1200, 305 + rand() % 10);
 		enemy_list.insert(enemy_list.begin(), tank);
 	}
 
+	if (infantry_count + brute_count + apache_count + kamikaze_count + tank_count == 66 && enemy_list.size() == 0) {
+		level1Pass();
+	}
 
 }
 
@@ -842,26 +845,28 @@ void Game::eradicate() {
 
 void Game::destroyAll() {
 
-	for (int i = 0; i < player.size(); i++) {
-		player.erase(player.begin() + i);
-	}
-
-	for (int i = 0; i < enemy_list.size(); i++) {
-		enemy_list.erase(enemy_list.begin() + i);
-	}
-
-	for (int i = 0; i < player_projectile_list.size(); i++) {
-		player_projectile_list.erase(player_projectile_list.begin() + i);
-	}
-
-	for (int i = 0; i < enemy_projectile_list.size(); i++) {
-		enemy_projectile_list.erase(enemy_projectile_list.begin() + i);
-
-	}
+	player.clear();
+	enemy_list.clear();
+	player_projectile_list.clear();
+	enemy_projectile_list.clear();
+	particle_engine.clear();
 }
 
 void Game::play() {
 
+	for (UI* temp : ui_list) {
+		temp->incVal(temp->getMaxVal());
+	}
+
+	shoot_delay = 0;
+	missile_delay = 0;
+	grenade_delay = 0;
+
+	ammo_count = 0;
+	health_count = 0;
+	airstrike_count = 0;
+	airstrike_ability = 0;
+	cracked_ability = 0;
 	infantry_count = 0;
 	brute_count = 0;
 	tank_count = 0;
@@ -892,6 +897,8 @@ void Game::uDied() {
 	menu = true;
 	level1 = false;
 	level2 = false;
+
+	color = { 192,102,159 };
 
 	createGameText("lol noob");
 
@@ -1005,12 +1012,13 @@ void Game::run() {
 
 				keyEvents();
 
-				moveEverything();
-				checkCollision();
+				
 				spawnPlayerProjectile();
 				spawnEnemies1();
 				spawnProjectiles1();
 				spawnSupplyBox();
+				moveEverything();
+				checkCollision();
 				renderBackdrop1();
 				updateFrame();
 				eradicate();

@@ -42,7 +42,7 @@ private:
 	Button* load_button = new Button(SCREEN_WIDTH / 2 - button_w / 2, SCREEN_HEIGHT / 2 + 60, "load");
 	Button* exit_button = new Button(SCREEN_WIDTH / 2 - button_w / 2, SCREEN_HEIGHT / 2 + 170, "exit");
 	
-	UI* ammo_ui = new UI(20, 80, "sprites/ammoUI.png",100);
+	UI* ammo_ui = new UI(20, 80, "sprites/ammoUI.png",500);
 	UI* grenade_ui = new UI(120, 80, "sprites/grenadeUI.png",10);
 	UI* missile_ui = new UI(220, 80, "sprites/missilesUI.png",10);
 	UI* airstrike_ui = new UI(20,140, "sprites/airstrikeUI.png",10);
