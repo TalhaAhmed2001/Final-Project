@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Particle.h"
 using namespace std;
 
 void GameObject::setX(int X) {
@@ -82,6 +83,12 @@ int GameObject::getAnimation() {
 float GameObject::getCurrSprite() {
 	return curr_sprite;
 }
+
+//
+//Particle* GameObject::getParticle()
+//{
+//	return nullptr;
+//}
 
 void GameObject::ifOut() {
 	if (getX() < 0 || getX() > (1400 - getImageSize()) || getY() < 0 || getY() > (600 - getImageSize())) {

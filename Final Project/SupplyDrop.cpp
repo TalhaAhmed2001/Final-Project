@@ -1,8 +1,16 @@
 #include "SupplyDrop.h"
 
 void SupplyDrop::Move() {
-	if (getY() < 300) {
-		setY(getY() + 10);
-		setAngle(-10 + rand() % 20);
+	if (getY() < 350) {
+		setY(getY() + 4);
+		setAngle(-5 + rand() % 5);
 	}
+	else {
+		setCurrSprite(1);
+	}
+}
+
+int SupplyDrop::getType()
+{
+	return type;
 }

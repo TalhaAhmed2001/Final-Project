@@ -8,6 +8,6 @@ public:
 	}
 
 	void Move();
-
+	Particle* getParticle();
 };
 

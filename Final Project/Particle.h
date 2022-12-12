@@ -1,7 +1,8 @@
 #pragma once
 #include "GameObject.h"
-class Particle : public GameObject
-{
+using namespace std;
+
+class Particle : public GameObject{
 private:
 	int alpha = 255;
 public:

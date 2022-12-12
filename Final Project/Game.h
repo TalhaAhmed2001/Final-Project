@@ -66,8 +66,13 @@ private:
 	int kamikaze_count = 0;
 
 	int ammo_count = 0;
-	int missile_count = 0;
-	int grenade_count = 0;
+	int health_count = 0;
+	int airstrike_count = 0;
+	int airstrike_ability = 0;
+	
+	int cracked_ability = 0;
+	long cracked_time = 0;
+	bool cracked = false;
 
 	float bg_x;
 	float menu_bg_x;
@@ -124,6 +129,8 @@ private:
 
 	//event handler
 	void keyEvents();
+
+	void spawnSupplyBox();
 	void spawnPlayerProjectile();
 
 	//move all objects

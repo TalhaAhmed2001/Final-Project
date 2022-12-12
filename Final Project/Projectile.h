@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "Particle.h"
+using namespace std;
 class Projectile : public GameObject
 {
 private:
@@ -17,6 +19,8 @@ public:
 	
 	int getAoE();
 	int getDamage();
+
+	virtual Particle* getParticle();
 	
 };
 

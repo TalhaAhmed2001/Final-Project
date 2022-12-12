@@ -32,8 +32,9 @@ public:
 	void incHealth(int h);
 
 	virtual Projectile* shoot();
-	virtual Particle* getParticle();
 	virtual Projectile* shoot(int x, int y);
+
+	virtual Particle* getParticle();
 
 	bool detCollision(int x, int y, int hitbox, int size);
 	//virtual Particle* getParticle() {}

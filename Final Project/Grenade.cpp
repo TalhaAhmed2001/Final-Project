@@ -1,4 +1,5 @@
 #include "Grenade.h"
+#include "Explosion.h"
 
 void Grenade::Move() {
 	if (getY()<380) {
@@ -7,4 +8,9 @@ void Grenade::Move() {
 		setAngle(getAngle() + rand() % 20);
 	}
 	
+}
+
+Particle* Grenade::getParticle() {
+	Explosion* particle = new Explosion(getX(), getY(), getSpriteSize() + 32, "sprites/explosion3.png");
+	return particle;
 }

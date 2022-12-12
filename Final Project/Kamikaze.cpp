@@ -1,4 +1,5 @@
 #include "Kamikaze.h"
+#include "Blood.h"
 
 void Kamikaze::Move()
 {
@@ -12,4 +13,9 @@ KamikazeBullet* Kamikaze::shoot()
     KamikazeBullet* bullet = new KamikazeBullet(getX(), getY());
     kill();
     return bullet;
+}
+
+Particle* Kamikaze::getParticle() {
+    Blood* particle = new Blood(getX(), getY(), getSpriteSize());
+    return particle;
 }

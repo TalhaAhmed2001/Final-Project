@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <stdlib.h>
-//#include <point.h>
+
 using namespace std;
 
 class GameObject
@@ -54,6 +54,8 @@ public:
 	int getSpriteSize();
 	int getAnimation();
 	float getCurrSprite();
+
+	//virtual Particle* getParticle();
 
 	void ifOut();
 };

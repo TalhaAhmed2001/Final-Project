@@ -1,3 +1,4 @@
+
 #pragma once
 #include "Character.h"
 #include "KamikazeBullet.h"
@@ -10,5 +11,6 @@ public:
 
 	void Move();
 	KamikazeBullet* shoot();
+	Particle* getParticle();
 };
 

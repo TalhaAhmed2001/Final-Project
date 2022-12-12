@@ -11,6 +11,7 @@ public:
 		max_val = v;
 	}
 	
+	int getMaxVal();
 	int getVal();
 	void incVal(int v);
 	void decVal();

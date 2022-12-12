@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Airstrike.cpp" />
     <ClCompile Include="Apache.cpp" />
     <ClCompile Include="ApacheBullet.cpp" />
     <ClCompile Include="Barricade.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Airstrike.h" />
     <ClInclude Include="Apache.h" />
     <ClInclude Include="ApacheBullet.h" />
     <ClInclude Include="Barricade.h" />

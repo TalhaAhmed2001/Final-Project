@@ -17,10 +17,6 @@ Projectile* Infantry::shoot() {
 }
 
 Particle* Infantry::getParticle() {
-	if (getX() < 500) {
-		Explosion* particle = new Explosion(getX(), getY(), getSpriteSize(),"sprites/explosion3.png");
-		return particle;
-	}
 	Blood* particle = new Blood(getX(), getY(), getSpriteSize());
 	return particle;
 }

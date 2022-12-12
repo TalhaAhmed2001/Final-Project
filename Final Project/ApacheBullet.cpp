@@ -1,4 +1,5 @@
 #include "ApacheBullet.h"
+#include "Explosion.h"
 
 void ApacheBullet::Move()
 {
@@ -9,4 +10,9 @@ void ApacheBullet::Move()
 	ifOut();
 
 	animate();
+}
+
+Particle* ApacheBullet::getParticle() {
+	Explosion* particle = new Explosion(getX() - 32, getY() - 32, getSpriteSize() + 64, "sprites/explosion3.png");
+	return particle;
 }

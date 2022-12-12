@@ -17,3 +17,8 @@ int Projectile::getDamage() {
 	return damage;
 }
 
+Particle* Projectile::getParticle()
+{
+	return nullptr;
+}
+

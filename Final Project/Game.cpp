@@ -3,6 +3,8 @@
 #include "Barricade.h"
 #include "Missile.h"
 #include "Grenade.h"
+#include "Airstrike.h"
+#include "SupplyDrop.h"
 
 void Game::countFPS() {
 	countedFrames = 0;
@@ -255,19 +257,32 @@ bool Game::createGameText(string text) {
 }
 
 void Game::renderUI() {
-
-	int health = player.at(1)->getHealth();
-	if (health < 0) {
-		health = 0;
-	}
+	int health;
 
 	SDL_Rect health_box;
-	health_box.x = 20;
-	health_box.y = 20;
-	health_box.w = 500 * ((float)health / 1000);
-	health_box.h = 50;
+	if (cracked == true) {
+		health_box.x = 15 + rand() % 10;
+		health_box.y = 15 + rand() % 10;
+		health_box.w = 500;
+		health = 99999;
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	}
+	else {
+		health = player.at(1)->getHealth();
+		if (health < 0) {
+			health = 0;
+		}
+		health_box.x = 20;
+		health_box.y = 20;
+		health_box.w = 500 * ((float)health / 1000);
+		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	}
 
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+
+	health_box.h = 50;
+	
+
+	
 	SDL_RenderFillRect(renderer, &health_box);
 
 	health_box.x = 20;
@@ -309,7 +324,39 @@ void Game::renderUI() {
 		SDL_DestroyTexture(texture);
 	}
 	
-	
+	if (airstrike_ability == 1) {
+		SDL_Rect temp;
+		temp.x = 20;
+		temp.y = 160;
+		temp.w = 64;
+		temp.h = 64;
+
+		Pic2Texture("sprites/airstrikeUI.png");
+		SDL_RenderCopy(renderer, texture, NULL, &temp);
+		SDL_DestroyTexture(texture);
+
+	}
+
+	if (cracked_ability == 1) {
+		SDL_Rect temp;
+		temp.x = 120;
+		temp.y = 160;
+		temp.w = 20;
+		temp.h = 60;
+
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+		SDL_RenderFillRect(renderer, &temp);
+
+		temp.x = 100;
+		temp.y = 180;
+		temp.w = 60;
+		temp.h = 20;
+
+		SDL_RenderFillRect(renderer, &temp);
+
+
+	}
 
 }
 
@@ -345,8 +392,19 @@ void Game::checkCollision(){
 				temp2->kill();
 				if (!temp1->isAlive()) {
 					health_inc += temp1->getMaxHP();
-					
 				}
+				if (temp1->getMaxHP() == 1 && temp1->getPath() == "sprites/ammo.png") {
+					ui_list.at(0)->incVal(ui_list.at(0)->getMaxVal());
+					ui_list.at(1)->incVal(ui_list.at(1)->getMaxVal());
+					ui_list.at(2)->incVal(ui_list.at(2)->getMaxVal());
+				}
+				if (temp1->getMaxHP() == 1 && temp1->getPath() == "sprites/Health.png") {
+					cracked_ability = 1;
+				}
+				if (temp1->getMaxHP() == 1 && temp1->getPath() == "sprites/Airstrike.png") {
+					airstrike_ability = 1;
+				}
+
 			}
 		}
 	}
@@ -358,7 +416,10 @@ void Game::checkCollision(){
 		}
 		for (Projectile* temp2 : enemy_projectile_list) {
 			if (temp1->detCollision(temp2->getX(), temp2->getY(), temp2->getAoE(), temp2->getImageSize())) {
-				temp1->decHealth(temp2->getDamage());
+				
+				if (!cracked) {
+					temp1->decHealth(temp2->getDamage());
+				}
 				temp2->kill();
 				
 			}
@@ -399,12 +460,50 @@ void Game::keyEvents() {
 			player_projectile_list.insert(player_projectile_list.begin(), grenade);
 		}
 	}
+
+	if (currentKeyStates[SDL_SCANCODE_M] && airstrike_ability == 1) {
+		airstrike_ability = 0;
+		for (int i = 0; i < 20; i++) {
+			Airstrike* airstrike = new Airstrike(400 + 50*i, 2 + rand()%8);
+			player_projectile_list.insert(player_projectile_list.begin(), airstrike);
+		}
+	}
+
+	if (currentKeyStates[SDL_SCANCODE_H] && cracked_ability == 1) {
+		cracked_ability = 0;
+		cracked_time = fps_timer.getTicks();
+		cracked = true;
+	}
+
+	if (fps_timer.getTicks() - cracked_time > 10000) {
+		cracked = false;
+	}
+}
+
+void Game::spawnSupplyBox() {
+	if (fps_timer.getTicks() % 30000 > 1000 && health_count == 0) {
+		SupplyDrop* supply = new SupplyDrop(1,"sprites/Health.png");
+		enemy_list.insert(enemy_list.begin(), supply);
+		health_count = 1;
+	}
+	if (fps_timer.getTicks() % 40000 > 1000 && ammo_count == 0) {
+		SupplyDrop* supply = new SupplyDrop(2,"sprites/ammo.png");
+		enemy_list.insert(enemy_list.begin(), supply);
+		ammo_count = 1;
+	}
+	if (fps_timer.getTicks() % 40000 > 1000 && airstrike_count == 0) {
+		SupplyDrop* supply = new SupplyDrop(3,"sprites/Airstrike.png");
+		enemy_list.insert(enemy_list.begin(), supply);
+		airstrike_count = 1;
+	}
+
 }
 
 void Game::spawnPlayerProjectile() {
-	if (shoot_delay < fps_timer.getTicks() && shoot == 1) {
+	if (shoot_delay < fps_timer.getTicks() && shoot == 1 && ui_list.at(2)->getVal()>0) {
 		shoot_delay = fps_timer.getTicks() + 200;
 		player_projectile_list.insert(player_projectile_list.begin(), player.at(0)->shoot(mouse_x + 64, mouse_y + 64));
+		ui_list.at(2)->decVal();;
 	}
 }
 
@@ -710,12 +809,20 @@ void Game::eradicate() {
 
 	for (int i = 0; i < player_projectile_list.size(); i++) {
 		if (!player_projectile_list.at(i)->isAlive()) {
+			Particle* temp = player_projectile_list.at(i)->getParticle();
+			if (temp != nullptr) {
+				particle_engine.insert(particle_engine.begin(), temp);
+			}
 			player_projectile_list.erase(player_projectile_list.begin() + i);
 		}
 	}
 
 	for (int i = 0; i < enemy_projectile_list.size(); i++) {
 		if (!enemy_projectile_list.at(i)->isAlive()) {
+			Particle* temp = enemy_projectile_list.at(i)->getParticle();
+			if (temp != nullptr) {
+				particle_engine.insert(particle_engine.begin(), temp);
+			}
 			enemy_projectile_list.erase(enemy_projectile_list.begin() + i);
 		}
 	}
@@ -903,6 +1010,7 @@ void Game::run() {
 				spawnPlayerProjectile();
 				spawnEnemies1();
 				spawnProjectiles1();
+				spawnSupplyBox();
 				renderBackdrop1();
 				updateFrame();
 				eradicate();

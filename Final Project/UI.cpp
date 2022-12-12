@@ -1,5 +1,9 @@
 #include "UI.h"
 
+int UI::getMaxVal() {
+	return max_val;
+}
+
 int UI::getVal() {
 	return val;
 }

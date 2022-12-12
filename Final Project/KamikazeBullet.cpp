@@ -1,4 +1,5 @@
 #include "KamikazeBullet.h"
+#include "Explosion.h"
 
 void KamikazeBullet::Move() {
 	
@@ -14,4 +15,9 @@ void KamikazeBullet::Move() {
 	
 	setAngle(atan2(360 - getY(), 200 - getX()) * (180.0 / 3.141592653589793238463)+180);
 	animate();
+}
+
+Particle* KamikazeBullet::getParticle() {
+	Explosion* particle = new Explosion(getX() - 32, getY() - 32, getSpriteSize() + 64, "sprites/explosion3.png");
+	return particle;
 }

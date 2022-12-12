@@ -40,13 +40,13 @@ Projectile* Character::shoot()
 	return nullptr;
 }
 
-Particle* Character::getParticle()
+Projectile* Character::shoot(int x, int y)
 {
 	return nullptr;
 }
 
-Projectile* Character::shoot(int x, int y)
-{
+
+Particle* Character::getParticle() {
 	return nullptr;
 }
 
