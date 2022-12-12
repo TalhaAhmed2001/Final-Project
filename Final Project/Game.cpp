@@ -92,7 +92,7 @@ void Game::init_menu() {
 	renderMenuBackdrop();
 	createGameLogo();
 	createPlayButton();
-	createLoadButton();
+	//createLoadButton();
 	createExitButton();
 
 }
@@ -107,7 +107,7 @@ void Game::createGameLogo() {
 	game_logo.w = 600;
 	game_logo.h = 200;
 
-	createText(" Ggayme ");
+	createText(" Plastic Slug ");
 
 	SDL_RenderCopy(renderer, texture, NULL, &game_logo);
 	SDL_DestroyTexture(texture);
@@ -169,7 +169,7 @@ void Game::createLoadButton() {
 
 	createText(load_button->getText());
 
-	SDL_RenderCopy(renderer, texture, NULL, &load_game);
+	//SDL_RenderCopy(renderer, texture, NULL, &load_game);
 	SDL_DestroyTexture(texture);
 }
 
@@ -619,7 +619,7 @@ void Game::spawnEnemies2() {
 
 	int time = fps_timer.getTicks();
 
-	/*if (time % 500 > 495 && time > 2000 && infantry_count < 20) {
+	if (time % 500 > 495 && time > 2000 && infantry_count < 20) {
 		infantry_count++;
 		Infantry* infantry = new Infantry(rand() % 100 + 1250, rand() % 10 + 385);
 		enemy_list.insert(enemy_list.begin(), infantry);
@@ -647,7 +647,7 @@ void Game::spawnEnemies2() {
 		tank_count++;
 		Tank* tank = new Tank(1200, 355 + rand() % 10);
 		enemy_list.insert(enemy_list.begin(), tank);
-	}*/
+	}
 
 	if (time > 5000 && boss_count < 1) {
 		boss_count++;
@@ -655,7 +655,7 @@ void Game::spawnEnemies2() {
 		enemy_list.insert(enemy_list.begin(), tank);
 	}
 
-	if (infantry_count + brute_count + apache_count + kamikaze_count + tank_count  + boss_count == 1 && enemy_list.size() == 0) {
+	if (infantry_count + brute_count + apache_count + kamikaze_count + tank_count  + boss_count == 46 && enemy_list.size() == 0) {
 		level2Pass();
 	}
 
@@ -1096,7 +1096,7 @@ void Game::run() {
 				renderBackdrop1();
 				updateFrame();
 				eradicate();
-				level1Pass();
+				//level1Pass();
 				if (player.size() == 1) {
 					uDied();
 				}
@@ -1130,7 +1130,7 @@ void Game::run() {
 				updateFrame();
 				eradicate();
 
-				if (player.size() == 1) {
+				if (player.size() < 2) {
 					uDied();
 				}
 
@@ -1138,6 +1138,7 @@ void Game::run() {
 
 				++countedFrames;
 			}
+
 		}
 	}
 	close();
