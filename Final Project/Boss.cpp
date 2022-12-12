@@ -17,9 +17,11 @@ Projectile* Boss::shoot() {
 
 	if (x == 6) {
 		projectile = new BossBoom(getX(), getY() + getSpriteSize() / 2);
+		setSFXPath("sfx\BossCannon.wav");
 	}
 	else{
 		projectile = new BossBullet(getX() +getSpriteSize() / 2, getY());
+		setSFXPath("sfx/shot.mp3");
 	}
 	setCurrSprite(2);
 	return projectile;

@@ -520,7 +520,7 @@ void Game::keyEvents() {
 		cracked = true;
 	}
 
-	if (fps_timer.getTicks() - cracked_time > 10000) {
+	if (fps_timer.getTicks() - cracked_time > 15000) {
 		cracked = false;
 	}
 }
@@ -714,6 +714,11 @@ void Game::spawnProjectiles1() {
 
 		if (fps_timer.getTicks() % freq > (freq - 40)) {
 			enemy_projectile_list.insert(enemy_projectile_list.begin(), temp->shoot());
+			string t1 = temp->getSFXPath();
+			if (t1 != "") {
+				loadSFX(t1);
+			}
+
 		}
 	}
 
