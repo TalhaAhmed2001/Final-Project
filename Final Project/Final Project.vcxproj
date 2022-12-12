@@ -138,6 +138,9 @@
     <ClCompile Include="Barricade.cpp" />
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="Blood.cpp" />
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossBullet.cpp" />
+    <ClCompile Include="BossBoom.cpp" />
     <ClCompile Include="Brute.cpp" />
     <ClCompile Include="BruteBullet.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -169,6 +172,9 @@
     <ClInclude Include="Barricade.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="Blood.h" />
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossBullet.h" />
+    <ClInclude Include="BossBoom.h" />
     <ClInclude Include="Brute.h" />
     <ClInclude Include="BruteBullet.h" />
     <ClInclude Include="Button.h" />

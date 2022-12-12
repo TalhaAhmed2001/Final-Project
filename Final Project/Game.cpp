@@ -486,7 +486,7 @@ void Game::spawnSupplyBox() {
 		enemy_list.insert(enemy_list.begin(), supply);
 		health_count = 1;
 	}
-	if (fps_timer.getTicks() % 70000 > 60000 && ammo_count == 0) {
+	if (fps_timer.getTicks() % 80000 > 50000 && ammo_count == 0) {
 		SupplyDrop* supply = new SupplyDrop(2,"sprites/ammo.png");
 		enemy_list.insert(enemy_list.begin(), supply);
 		ammo_count = 1;
@@ -581,7 +581,7 @@ void Game::spawnEnemies1() {
 		enemy_list.insert(enemy_list.begin(), kamikaze);
 	}
 
-	if (time % 3000 > 2985 && time > 65000 && tank_count < 10) {
+	if (time % 3000 > 2985 && time > 50000 && tank_count < 10) {
 		tank_count++;
 		Tank* tank = new Tank(1200, 305 + rand() % 10);
 		enemy_list.insert(enemy_list.begin(), tank);
@@ -589,6 +589,74 @@ void Game::spawnEnemies1() {
 
 	if (infantry_count + brute_count + apache_count + kamikaze_count + tank_count == 66 && enemy_list.size() == 0) {
 		level1Pass();
+	}
+
+}
+
+void Game::spawnPlayer2() {
+
+	Barricade* bar = new Barricade(270, 370, "sprites/woodenbarricade.png", 200);
+	player.insert(player.begin(), bar);
+
+	bar = new Barricade(350, 400, "sprites/metalbarricade1.png", 100);
+	player.insert(player.begin(), bar);
+
+	bar = new Barricade(400, 400, "sprites/metalbarricade3.png", 100);
+	player.insert(player.begin(), bar);
+
+	bar = new Barricade(450, 400, "sprites/metalbarricade3.png", 100);
+	player.insert(player.begin(), bar);
+
+	Base* base = new Base(50, 290);
+	player.insert(player.begin(), base);
+
+	Turret* play = new Turret(110, 200);
+	player.insert(player.begin(), play);
+
+}
+
+void Game::spawnEnemies2() {
+
+	int time = fps_timer.getTicks();
+
+	/*if (time % 500 > 495 && time > 2000 && infantry_count < 20) {
+		infantry_count++;
+		Infantry* infantry = new Infantry(rand() % 100 + 1250, rand() % 10 + 385);
+		enemy_list.insert(enemy_list.begin(), infantry);
+	}
+
+	if (time % 2000 > 1995 && time > 10000 && brute_count < 7) {
+		brute_count++;
+		Brute* brute = new Brute(1200, 313 + rand() % 3);
+		enemy_list.insert(enemy_list.begin(), brute);
+	}
+
+	if (time % 2500 > 2495 && time > 20000 && apache_count < 5) {
+		apache_count++;
+		Apache* apache = new Apache(1300, 100 + rand() % 20);
+		enemy_list.insert(enemy_list.begin(), apache);
+	}
+
+	if (time % 3000 > 2990 && time > 25000 && kamikaze_count < 7) {
+		kamikaze_count++;
+		Kamikaze* kamikaze = new Kamikaze(1200, rand() % 20 + 150);
+		enemy_list.insert(enemy_list.begin(), kamikaze);
+	}
+
+	if (time % 3000 > 2985 && time > 50000 && tank_count < 6) {
+		tank_count++;
+		Tank* tank = new Tank(1200, 355 + rand() % 10);
+		enemy_list.insert(enemy_list.begin(), tank);
+	}*/
+
+	if (time > 5000 && boss_count < 1) {
+		boss_count++;
+		Boss* tank = new Boss();
+		enemy_list.insert(enemy_list.begin(), tank);
+	}
+
+	if (infantry_count + brute_count + apache_count + kamikaze_count + tank_count  + boss_count == 1 && enemy_list.size() == 0) {
+		level2Pass();
 	}
 
 }
@@ -753,8 +821,8 @@ void Game::renderBackdrop1() {
 
 void Game::renderBackdrop2() {
 
-	bg_x += 0.5;
-	bg.x = (int)(bg_x) % 470;
+	//bg_x += 0.5;
+	bg.x = 50;
 	bg.y = 20;
 	bg.w = 500;
 	bg.h = 200;
@@ -872,25 +940,30 @@ void Game::play() {
 	tank_count = 0;
 	apache_count = 0;
 	kamikaze_count = 0;
+	boss_count;
 
+	destroyAll();
+
+}
+
+void Game::menuPass() {
 	menu = false;
 	level1 = true;
+	level2 = true;
+	play();
 }
 
 void Game::level1Pass() {
 
-	infantry_count = 0;
-	brute_count = 0;
-	tank_count = 0;
-	apache_count = 0;
-	kamikaze_count = 0;
-
 	level1 = false;
 	level2 = true;
+	play();
 }
 
 void Game::level2Pass() {
 	level2 = false;
+	menu = true;
+	play();
 }
 
 void Game::uDied() {
@@ -965,7 +1038,7 @@ void Game::run() {
 					//play button
 					if (play_button->ifInside(mouse_x, mouse_y)) {
 						if (e.type == SDL_MOUSEBUTTONDOWN) {
-							play();
+							menuPass();
 						}
 					}
 
@@ -1003,6 +1076,7 @@ void Game::run() {
 
 			//level 1 loop
 			while (!quit && level1) {
+				
 
 				cap_timer.start();
 
@@ -1022,7 +1096,7 @@ void Game::run() {
 				renderBackdrop1();
 				updateFrame();
 				eradicate();
-				
+				level1Pass();
 				if (player.size() == 1) {
 					uDied();
 				}
@@ -1034,9 +1108,36 @@ void Game::run() {
 			}
 
 			countFPS();
+			spawnPlayer2();
 
 			//level 2 loop
-			while (!quit && level2) {}
+			while (!quit && level2) {
+
+				SDL_RenderClear(renderer);
+				//level2Pass();
+
+				SDL_GetMouseState(&mouse_x, &mouse_y);
+
+				keyEvents();
+
+				spawnPlayerProjectile();
+				spawnEnemies2();
+				spawnProjectiles1();
+				spawnSupplyBox();
+				moveEverything();
+				checkCollision();
+				renderBackdrop2();
+				updateFrame();
+				eradicate();
+
+				if (player.size() == 1) {
+					uDied();
+				}
+
+				calcFPS(countedFrames);
+
+				++countedFrames;
+			}
 		}
 	}
 	close();

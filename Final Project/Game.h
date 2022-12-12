@@ -20,6 +20,7 @@
 #include "Turret.h"
 #include "Button.h"
 #include "UI.h"
+#include "Boss.h"
 
 using namespace std;
 
@@ -64,6 +65,7 @@ private:
 	int tank_count = 0;
 	int apache_count = 0;
 	int kamikaze_count = 0;
+	int boss_count = 0;
 
 	int ammo_count = 0;
 	int health_count = 0;
@@ -118,10 +120,6 @@ private:
 	bool createText(string text);
 	bool createGameText(string text);
 
-	void init_level1();
-	void init_level2();
-
-	void close_level1();
 	bool Pic2Texture(string path);
 	void renderUI();
 
@@ -138,6 +136,9 @@ private:
 
 	void spawnPlayer1();
 	void spawnEnemies1();
+	void spawnPlayer2();
+	void spawnEnemies2();
+
 	void spawnProjectiles1();
 
 	//render objects
@@ -160,6 +161,8 @@ private:
 	void destroyAll();
 
 	void play();
+
+	void menuPass();
 
 	void level1Pass();
 
