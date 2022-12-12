@@ -4,8 +4,8 @@
 class Apache : public Character
 {
 public:
-	Apache(int x, int y) : Character(x,y, 64, 128, 2, "sprites/apache.png", 100, 120, 120, 3000) {
-
+	ApacheBullet(int x, int y) : Projectile(x, y + 85, 16, 32, 20, 40, 2, "sprites/apachebullet.png") {
+		setSFXPath("sfx/explosion.mp3");
 	}
 
 	void Move();

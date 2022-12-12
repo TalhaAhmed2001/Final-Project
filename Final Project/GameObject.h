@@ -16,6 +16,7 @@ private:
 	int animation;
 	string path;
 	float curr_sprite = 0;
+	string sfx_path = "";
 
 	void setImageSize(int size);
 	void setPath(string p);
@@ -37,6 +38,9 @@ public:
 
 	virtual void Move() {}
 	virtual void Move(int x, int y) {}
+
+	void setSFXPath(string s);
+	string getSFXPath();
 
 	void setX(int X);
 	void setY(int Y);

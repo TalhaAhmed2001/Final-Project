@@ -380,7 +380,43 @@ bool Game::Pic2Texture(string path)
 	return success;
 }
 
-void Game::checkCollision(){
+bool Game::loadMusic(string path)
+{
+	Mix_HaltMusic();
+	if (music != nullptr) {
+		Mix_FreeMusic(music);
+	}
+	bool success = true;
+
+	music = Mix_LoadMUS(path.c_str());
+
+	if (music == nullptr) {
+		printf("Unable to load music %s! SDL Error: %s\n", path.c_str(), Mix_GetError());
+		success = false;
+	}
+
+	Mix_PlayMusic(music, -1);
+	return success;
+}
+
+bool Game::loadSFX(string path)
+{
+	if (chunk != nullptr) {
+		Mix_FreeChunk(chunk);
+	}
+	bool success = true;
+
+	chunk = Mix_LoadWAV(path.c_str());
+
+	if (chunk == nullptr) {
+		printf("Unable to load music %s! SDL Error: %s\n", path.c_str(), Mix_GetError());
+		success = false;
+	}
+	Mix_PlayChannel(-1, chunk, 0);
+	return success;
+}
+
+void Game::checkCollision() {
 
 	int health_inc = 0;
 
@@ -390,6 +426,10 @@ void Game::checkCollision(){
 			if (temp1->detCollision(temp2->getX(), temp2->getY(), temp2->getAoE(), temp2->getImageSize())) {
 				temp1->decHealth(temp2->getDamage());
 				temp2->kill();
+				string t1 = temp2->getSFXPath();
+				if (t1 != "") {
+					loadSFX(t1);
+				}
 				if (!temp1->isAlive()) {
 					health_inc += temp1->getMaxHP();
 				}
@@ -411,19 +451,24 @@ void Game::checkCollision(){
 
 	//player collsion
 	for (Character* temp1 : player) {
-		if (typeid(*temp1) == typeid(Base)) {
+		if (typeid(temp1) == typeid(Base)) {
 			temp1->incHealth(health_inc);
 		}
+
 		for (Projectile* temp2 : enemy_projectile_list) {
 			if (temp1->detCollision(temp2->getX(), temp2->getY(), temp2->getAoE(), temp2->getImageSize())) {
-				
+
 				if (!cracked) {
 					temp1->decHealth(temp2->getDamage());
 				}
 				temp2->kill();
-				
+				string t1 = temp2->getSFXPath();
+				if (t1 != "") {
+					loadSFX(t1);
+				}
 			}
 		}
+
 	}
 
 }
@@ -501,6 +546,7 @@ void Game::spawnSupplyBox() {
 
 void Game::spawnPlayerProjectile() {
 	if (shoot_delay < fps_timer.getTicks() && shoot == 1 && ui_list.at(2)->getVal()>0) {
+		loadSFX("sfx/shot.mp3");
 		shoot_delay = fps_timer.getTicks() + 200;
 		player_projectile_list.insert(player_projectile_list.begin(), player.at(0)->shoot(mouse_x + 64, mouse_y + 64));
 		ui_list.at(2)->decVal();;
@@ -1019,6 +1065,7 @@ void Game::run() {
 
 			countFPS();
 
+			loadMusic("sfx/Menu.mp3");
 			//menu loop
 			while (!quit && menu) {
 				cap_timer.start();
@@ -1074,6 +1121,8 @@ void Game::run() {
 			countFPS();
 			spawnPlayer1();
 
+			loadMusic("sfx/Level1.mp3");
+
 			//level 1 loop
 			while (!quit && level1) {
 				
@@ -1109,6 +1158,8 @@ void Game::run() {
 
 			countFPS();
 			spawnPlayer2();
+
+			loadMusic("sfx/Level2.mp3");
 
 			//level 2 loop
 			while (!quit && level2) {

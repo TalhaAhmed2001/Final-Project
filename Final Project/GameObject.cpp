@@ -84,11 +84,13 @@ float GameObject::getCurrSprite() {
 	return curr_sprite;
 }
 
-//
-//Particle* GameObject::getParticle()
-//{
-//	return nullptr;
-//}
+void GameObject::setSFXPath(string p) {
+	sfx_path = p;
+}
+
+string GameObject::getSFXPath() {
+	return sfx_path;
+}
 
 void GameObject::ifOut() {
 	if (getX() < 0 || getX() > (1400 - getImageSize()) || getY() < 0 || getY() > (600 - getImageSize())) {

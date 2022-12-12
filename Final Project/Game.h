@@ -94,6 +94,11 @@ private:
 
 	string timer_text;
 
+
+	Mix_Music* music = nullptr;
+
+	Mix_Chunk* chunk = nullptr;
+
 	vector<Character*> player;
 	vector<Character*> enemy_list;
 	vector<Projectile*> player_projectile_list;
@@ -121,9 +126,13 @@ private:
 	bool createGameText(string text);
 
 	bool Pic2Texture(string path);
+
 	void renderUI();
 
 	void checkCollision();
+
+	bool loadMusic(string path);
+	bool loadSFX(string path);
 
 	//event handler
 	void keyEvents();
