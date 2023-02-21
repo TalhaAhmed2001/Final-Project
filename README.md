@@ -1,4 +1,4 @@
-Plastic Slug
+# Plastic Slug
 
 5th Semester Game Design and Development Final Project
 
